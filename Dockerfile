@@ -17,7 +17,7 @@ RUN rm /etc/nginx/sites-enabled/default && \
 
 RUN chown -R www-data:www-data /var/www/html && chmod -R 755 /var/www/html
 
-RUN php migrate.php
+RUN database:migrate
 
 EXPOSE 80
 CMD ["/usr/bin/supervisord"]
