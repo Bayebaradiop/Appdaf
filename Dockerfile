@@ -9,16 +9,13 @@ RUN apt-get update && \
 WORKDIR /var/www/html
 
 COPY . .
-
-# Copie la config NGINX
 COPY nginx.conf /etc/nginx/sites-available/default
-
-# Copie la config supervisor
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 RUN rm /etc/nginx/sites-enabled/default && \
     ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
 
-EXPOSE 80
+RUN chown -R www-data:www-data /var/www/html && chmod -R 755 /var/www/html
 
+EXPOSE 80
 CMD ["/usr/bin/supervisord"]
