@@ -23,6 +23,9 @@ class CitoyenRipository extends AbstracteRipository
         return $data ? Citoyen::toObject($data) : null;
     }
 
+
+
+    
     public function findAll(): array
     {
         $sql = "SELECT * FROM citoyen";

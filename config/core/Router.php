@@ -16,6 +16,9 @@ class Router
             // Convertit /api/citoyen/{nci} en regex
             $regex = preg_replace('#\{[^/]+\}#', '([^/]+)', $pattern);
             $regex = "#^" . $regex . "$#";
+            
+            // var_dump($pattern); die();
+
 
             if ($method === $requestMethod && preg_match($regex, $requestUri, $matches)) {
                 array_shift($matches); // Retire le match complet

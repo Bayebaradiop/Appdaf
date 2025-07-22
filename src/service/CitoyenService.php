@@ -19,6 +19,10 @@ class CitoyenService
     {
         return $this->citoyenRepository->findByNci($nci);
     }
+
+
+
+    
     public function findAll(): array
     {
         return $this->citoyenRepository->findAll();

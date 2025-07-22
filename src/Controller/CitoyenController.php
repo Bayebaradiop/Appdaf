@@ -30,7 +30,7 @@ class CitoyenController
                     'url_carte_recto' => $citoyen->getUrlCarteRecto(),
                     'url_carte_verso' => $citoyen->getUrlCarteVerso(),
                 ],
-                'statut' => 'success',
+                'statut' => 'success affaire yi diall na bay',
                 'code' => 200,
                 'message' => "Le numéro de carte d'identité a été retrouvé"
             ]);
@@ -38,7 +38,7 @@ class CitoyenController
             http_response_code(404);
             echo json_encode([
                 'data' => null,
-                'statut' => 'error',
+                'statut' => 'error lii bakhoulll wayyyy',
                 'code' => 404,
                 'message' => "Le numéro de carte d'identité non retrouvé"
             ]);
