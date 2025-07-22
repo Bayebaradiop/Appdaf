@@ -1,7 +1,9 @@
 <?php
 
-$dotenv = Dotenv\Dotenv::createImmutable('../');
-$dotenv->load();
+$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
+if (file_exists(dirname(__DIR__).'/.env')) {
+    $dotenv->load();
+}
 
 define('URL', $_ENV['URL']);
 define('IMG_DIR', $_ENV['IMG_DIR']);
