@@ -17,6 +17,11 @@ RUN rm /etc/nginx/sites-enabled/default && \
 
 RUN chown -R www-data:www-data /var/www/html && chmod -R 755 /var/www/html
 
+# Installe Composer
+RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && \
+    php composer-setup.php --install-dir=/usr/local/bin --filename=composer && \
+    php -r "unlink('composer-setup.php');"
+
 RUN composer install
 RUN composer database:migrate
 
