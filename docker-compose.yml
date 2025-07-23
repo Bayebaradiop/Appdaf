@@ -1,42 +1,50 @@
-version: '3.8'
+version: '3'
+
 services:
-  appdaf:
-    build: .
-    container_name: appdaf
-    restart: always
-    volumes:
-      - .:/var/www/html
-    depends_on:
-      - db
-    networks:
-      - appnet
-  db:
-    image: postgres:15
-    container_name: appdaf_db
+  # Service PostgreSQL
+  postgres:
+    image: postgres:14
     restart: always
     environment:
-      POSTGRES_DB: appdaf
-      POSTGRES_USER: appdafuser
-      POSTGRES_PASSWORD: appdafpass
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_DB: ${DB_DATABASE}
     volumes:
-      - db_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
-      - appnet
-  nginx:
-    image: nginx:latest
-    container_name: appdaf_nginx
-    restart: always
-    ports:
-      - "80:80"
-    volumes:
-      - ./public:/var/www/html/public
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - appdaf_network
+
+  # Service de l'application
+  app:
+    build: .
     depends_on:
-      - appdaf
+      - postgres
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      dsn: pgsql:host=postgres;port=5432;dbname=${DB_DATABASE};
+      APP_ENV: ${APP_ENV}
+      APP_DEBUG: ${APP_DEBUG}
+      URL: ${URL}
+      TWILIO_SID: ${TWILIO_SID}
+      TWILIO_TOKEN: ${TWILIO_TOKEN}
+      TWILIO_FROM: ${TWILIO_FROM}
+      IMG_DIR: ${IMG_DIR}
+    ports:
+      - "10000:80"
+    volumes:
+      - app_uploads:/var/www/html/public/uploads
     networks:
-      - appnet
-volumes:
-  db_data:
+      - appdaf_network
+
 networks:
-  appnet:
+  appdaf_network:
     driver: bridge
+
+volumes:
+  postgres_data:
+  app_uploads:
